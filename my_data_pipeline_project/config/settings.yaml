@@ -1,0 +1,32 @@
+data:
+  raw_dir: "data/raw"
+  processed_dir: "data/processed"
+  sqlite_path: "data/Chinook_Sqlite.sqlite"
+  output_path: "output"
+
+etl:
+  chunk_size: 1000
+  enable_logging: true
+  retry_attempts: 3
+
+spark:
+  app_name: "ChinookETLPipeline"
+  master: "local[*]"
+  shuffle_partitions: 8
+  config:
+    spark.sql.execution.arrow.pyspark.enabled: true
+    spark.driver.memory: "2g"
+
+transform:
+  drop_null_columns: true
+  normalize_column_names: true
+  currency_conversion_rate: 34.5 # USD to THB
+
+database:
+  type: "sqlite"
+  table_name: "TransformedTracks"
+  if_exists: "replace"
+
+dev:
+  enable_chispa: true
+  lint_on_commit: true
